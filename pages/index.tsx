@@ -26,30 +26,30 @@ const Home: NextPage<{
         <title>Liquidated 🔥</title>
         <meta
           name="description"
-          content="List of core BUIDLers behind the most impactful web3 projects."
+          content="most recent liquidations powered by Messari Subgraphs."
         />
         <meta property="og:url" content="https://liquidated.live/" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="They BUIDL" />
         <meta
           property="og:description"
-          content="List of core BUIDLers behind the most impactful web3 projects."
+          content="most recent liquidations powered by Messari Subgraphs."
         />
         <meta
           property="og:image"
-          content="https://theybuidl.xyz/og-preview.png"
+          content="https://liquidated.live/og-preview.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content="theybuidl.xyz" />
-        <meta property="twitter:url" content="https://theybuidl.xyz/" />
+        <meta property="twitter:domain" content="liquidated.live" />
+        <meta property="twitter:url" content="https://liquidated.live/" />
         <meta name="twitter:title" content="They BUIDL" />
         <meta
           name="twitter:description"
-          content="List of core BUIDLers behind the most impactful web3 projects."
+          content="most recent liquidations powered by Messari Subgraphs."
         />
         <meta
           name="twitter:image"
-          content="https://theybuidl.xyz/og-preview.png"
+          content="https://liquidated.live/og-preview.png"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -59,11 +59,18 @@ const Home: NextPage<{
           <p className="my-10 text-6xl font-bold text-purple-600">
             liquidated 🔥
           </p>
-          <p className="my-5">most recent liquidations ...</p>
+          <p className="my-5">
+            most recent liquidations powered by{' '}
+            <a
+              className="underline"
+              href="https://github.com/messari/subgraphs"
+            >
+              Messari Subgraphs
+            </a>
+          </p>
           <Liquidates liquidates={liquidates} />
         </div>
       </main>
-
       <Footer />
     </div>
   )
