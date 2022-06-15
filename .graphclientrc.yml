@@ -3,7 +3,7 @@ sources:
     handler:
       graphql:
         endpoint: https://api.thegraph.com/subgraphs/name/messari/compound-ethereum
-  - name: aavev2
-    handler:
-      graphql:
-        endpoint: https://api.thegraph.com/subgraphs/name/messari/aave-v2-ethereum
+  # - name: aavev2
+  #   handler:
+  #     graphql:
+  #       endpoint: https://api.thegraph.com/subgraphs/name/messari/aave-v2-ethereum

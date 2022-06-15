@@ -1,17 +1,17 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import React, { useState } from 'react'
-// import axios from "axios"
-import { execute } from "../.graphclient"
-import gql from 'graphql-tag';
+import React from 'react'
+import { execute } from '../.graphclient'
+import gql from 'graphql-tag'
+import Footer from '../components/footer'
 
 interface Liquidate {
-  protocol: { name: string}
+  protocol: { name: string }
   hash: string
   timestamp: string
   from: string
   to: string
-  market: { name: string }
+  market: { inputToken: { symbol: string } }
   asset: { symbol: string }
   amountUSD: string
   profitUSD: string
@@ -20,8 +20,6 @@ interface Liquidate {
 const Home: NextPage<{
   liquidates: Array<Liquidate>
 }> = ({ liquidates }) => {
-  // const [num, setNum] = useState(LOAD_NUM)
-
   return (
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
@@ -54,100 +52,78 @@ const Home: NextPage<{
           content="https://theybuidl.xyz/og-preview.png"
         />
         <link rel="icon" href="/favicon.ico" />
-        <script
-          data-token="JKVUMR3WYYPX"
-          async
-          src="https://cdn.splitbee.io/sb.js"
-        ></script>
       </Head>
 
-      <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-1/2">
+      <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-3/5">
         <div className="w-full">
-          <p className="my-10 text-6xl font-bold text-purple-600">Liquidated 🔥</p>
-          <div className="my-5">
-            <p>
-              Most recent liquidations ...
-            </p>
-          </div>
-
-          <div>{liquidates.map((l, i) => <Liquidate {...l}/>)}</div>
-          
-          {/* <div className="flex justify-center pb-4">
-            {num < buidlers.length ? (
-              <button
-                className="hover:underline"
-                onClick={() => setNum((prevNum) => prevNum + LOAD_NUM)}
-              >
-                Load More 👇
-              </button>
-            ) : (
-              'The end!'
-            )}
-          </div> */}
+          <p className="my-10 text-6xl font-bold text-purple-600">
+            liquidated 🔥
+          </p>
+          <p className="my-5">most recent liquidations ...</p>
+          <Liquidates liquidates={liquidates} />
         </div>
       </main>
 
-      <footer className="flex h-20 w-full flex-col items-center justify-center border-t">
-        <div>
-          by{' '}
-          <a className="underline" href="https://twitter.com/_0xbe1">
-            0xbe1
-          </a>{' '}
-          |{' '}
-          <a className="underline" href="https://github.com/0xbe1/theybuidl">
-            Code
-          </a>{' '}
-          <a className="underline" href="https://discord.gg/u5KUjNZ8wy">
-            Community
-          </a>
-        </div>
-        <div>
-          <a className="underline" href="https://miniscan.xyz">
-            miniscan.xyz
-          </a>{' '}
-          |{' '}
-          <a className="text-purple-600 underline" href="https://theybuidl.xyz">
-            theybuidl.xyz
-          </a>{' '}
-          |{' '}
-          <a className="underline" href="https://okgraph.xyz">
-            okgraph.xyz
-          </a>{' '}
-          |{' '}
-          <a className="underline" href="https://name3.org">
-            name3.org
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
 
-function Liquidate(props: Liquidate) {
+function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
   return (
-    <div className="my-4 flex rounded-lg border border-purple-600">
-      {JSON.stringify(props)}
+    <div className="my-4">
+      <div className="grid grid-cols-6 text-purple-600">
+        <div>time (UTC)</div>
+        <div>protocol</div>
+        <div>repaid</div>
+        <div>collateral</div>
+        <div>amount (USD)</div>
+        <div></div>
+      </div>
+      {liquidates.map((l, i) => (
+        <div key={i} className="grid w-full grid-cols-6">
+          <div>
+            {new Date(parseInt(l.timestamp)).toLocaleTimeString('en-US')}
+          </div>
+          <div>{l.protocol.name}</div>
+          <div>{l.market.inputToken.symbol}</div>
+          <div>{l.asset.symbol}</div>
+          <div>{parseFloat(l.amountUSD).toFixed(2)}</div>
+          <a href={`https://etherscan.io/tx/${l.hash}`}>🔗</a>
+        </div>
+      ))}
     </div>
   )
 }
 
-const query = gql`{
-  liquidates(orderBy:timestamp, orderDirection:desc, where:{amountUSD_gt:10000}, first: 10) {
-    protocol { name }
-    hash
-    timestamp
-    from
-    to
-    market {
-      name
+const query = gql`
+  {
+    liquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 1000 }
+      first: 100
+    ) {
+      protocol {
+        name
+      }
+      hash
+      timestamp
+      from
+      to
+      market {
+        inputToken {
+          symbol
+        }
+      }
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
     }
-    asset {
-      symbol
-    }
-    amountUSD
-    profitUSD
   }
-}`
+`
 
 export async function getStaticProps() {
   const { data } = await execute(query, {})
