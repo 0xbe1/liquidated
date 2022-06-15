@@ -8,7 +8,7 @@ const Footer = () => (
         0xbe1
       </a>{' '}
       |{' '}
-      <a className="underline" href="https://github.com/0xbe1/theybuidl">
+      <a className="underline" href="https://github.com/0xbe1/liquidated">
         Code
       </a>{' '}
       <a className="underline" href="https://discord.gg/u5KUjNZ8wy">
@@ -20,7 +20,11 @@ const Footer = () => (
         miniscan.xyz
       </a>{' '}
       |{' '}
-      <a className="text-purple-600 underline" href="https://theybuidl.xyz">
+      <a className="text-purple-600 underline" href="https://liquidated.live">
+        liquidated.live
+      </a>{' '}
+      |{' '}
+      <a className="underline" href="https://theybuidl.xyz">
         theybuidl.xyz
       </a>{' '}
       |{' '}
