@@ -5,6 +5,35 @@ import { execute } from '../.graphclient'
 import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
+const query = gql`
+  {
+    liquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 1000 }
+      first: 100
+    ) {
+      protocol {
+        name
+      }
+      hash
+      timestamp
+      from
+      to
+      market {
+        inputToken {
+          symbol
+        }
+      }
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
+  }
+`
+
 interface Liquidate {
   protocol: { name: string }
   hash: string
@@ -102,35 +131,6 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
     </div>
   )
 }
-
-const query = gql`
-  {
-    liquidates(
-      orderBy: timestamp
-      orderDirection: desc
-      where: { amountUSD_gt: 1000 }
-      first: 100
-    ) {
-      protocol {
-        name
-      }
-      hash
-      timestamp
-      from
-      to
-      market {
-        inputToken {
-          symbol
-        }
-      }
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
-    }
-  }
-`
 
 export async function getStaticProps() {
   const { data } = await execute(query, {})
