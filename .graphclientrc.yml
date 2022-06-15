@@ -3,7 +3,25 @@ sources:
     handler:
       graphql:
         endpoint: https://api.thegraph.com/subgraphs/name/messari/compound-ethereum
-  # - name: aavev2
-  #   handler:
-  #     graphql:
-  #       endpoint: https://api.thegraph.com/subgraphs/name/messari/aave-v2-ethereum
+    transforms:
+      - rename:
+          renames:
+            - from:
+                type: Query
+                field: liquidates
+              to:
+                type: Query
+                field: compoundv2Liquidates
+  - name: aavev2
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/messari/aave-v2-ethereum
+    transforms:
+      - rename:
+          renames:
+            - from:
+                type: Query
+                field: liquidates
+              to:
+                type: Query
+                field: aavev2Liquidates

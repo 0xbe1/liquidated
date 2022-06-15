@@ -7,7 +7,7 @@ import Footer from '../components/footer'
 
 const query = gql`
   {
-    liquidates(
+    compoundv2Liquidates(
       orderBy: timestamp
       orderDirection: desc
       where: { amountUSD_gt: 1000 }
@@ -31,6 +31,30 @@ const query = gql`
       amountUSD
       profitUSD
     }
+    aavev2Liquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 1000 }
+      first: 100
+    ) {
+      protocol {
+        name
+      }
+      hash
+      timestamp
+      from
+      to
+      market {
+        inputTokens {
+          symbol
+        }
+      }
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
   }
 `
 
@@ -40,7 +64,10 @@ interface Liquidate {
   timestamp: string
   from: string
   to: string
-  market: { inputToken: { symbol: string } }
+  market: {
+    inputToken?: { symbol: string }
+    inputTokens?: { symbol: string }[]
+  }
   asset: { symbol: string }
   amountUSD: string
   profitUSD: string
@@ -122,7 +149,11 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
             {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString('en-US')}
           </div>
           <div>{l.protocol.name}</div>
-          <div>{l.market.inputToken.symbol}</div>
+          <div>
+            {l.market.inputToken
+              ? l.market.inputToken.symbol
+              : l.market.inputTokens![0].symbol}
+          </div>
           <div>{l.asset.symbol}</div>
           <div>{parseFloat(l.amountUSD).toFixed(2)}</div>
           <a href={`https://etherscan.io/tx/${l.hash}`}>🔗</a>
@@ -134,9 +165,13 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
 
 export async function getStaticProps() {
   const { data } = await execute(query, {})
+  const compoundv2Liquidates = data.compoundv2Liquidates as Array<Liquidate>
+  const aavev2Liquidates = data.aavev2Liquidates as Array<Liquidate>
   return {
     props: {
-      liquidates: data.liquidates as Array<Liquidate>,
+      liquidates: compoundv2Liquidates
+        .concat(aavev2Liquidates)
+        .sort((a, b) => b.timestamp.localeCompare(a.timestamp)),
     },
     revalidate: 60, // ISR (incremental static regeneration) per minute
   }
