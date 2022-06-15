@@ -109,17 +109,17 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
   return (
     <div className="my-4">
       <div className="grid grid-cols-6 text-purple-600">
-        <div>time (UTC)</div>
+        <div>time (locale)</div>
         <div>protocol</div>
         <div>repaid</div>
         <div>collateral</div>
-        <div>amount (USD)</div>
+        <div>amount (usd)</div>
         <div></div>
       </div>
       {liquidates.map((l, i) => (
         <div key={i} className="grid w-full grid-cols-6">
           <div>
-            {new Date(parseInt(l.timestamp)).toLocaleTimeString('en-US')}
+            {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString('en-US')}
           </div>
           <div>{l.protocol.name}</div>
           <div>{l.market.inputToken.symbol}</div>
