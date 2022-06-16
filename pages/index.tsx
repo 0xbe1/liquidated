@@ -6,15 +6,13 @@ import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
 // TODO: add timestamp_ge and remove first
-// TODO: add network
 // TODO: slider to pick amountUSD_gt
-// TODO: add venus
 const query = gql`
   {
     compoundv2Liquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 1000 }
+      where: { amountUSD_gt: 0 }
       first: 100
     ) {
       protocol {
@@ -39,7 +37,7 @@ const query = gql`
     aavev2Liquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 1000 }
+      where: { amountUSD_gt: 0 }
       first: 100
     ) {
       protocol {
@@ -61,11 +59,36 @@ const query = gql`
       amountUSD
       profitUSD
     }
+    venusLiquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0 }
+      first: 100
+    ) {
+      protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
+      market {
+        inputToken {
+          symbol
+        }
+      }
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
   }
 `
 
 interface Liquidate {
-  protocol: { 
+  protocol: {
     name: string
     network: string
   }
@@ -155,7 +178,10 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
       {liquidates.map((l, i) => (
         <div key={i} className="grid w-full grid-cols-6">
           <div>
-            {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString('en-US', {hour12:false})}
+            {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString(
+              'en-US',
+              { hour12: false }
+            )}
           </div>
           <div>{l.protocol.name}</div>
           <div>
@@ -165,7 +191,13 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
           </div>
           <div>{l.asset.symbol}</div>
           <div>{parseFloat(l.amountUSD).toFixed(2)}</div>
-          <a href={`https://etherscan.io/tx/${l.hash}`}>🔗</a>
+          <a
+            href={`https://${
+              l.protocol.network === 'BSC' ? 'bscscan.com' : 'etherscan.io'
+            }/tx/${l.hash}`}
+          >
+            🔗
+          </a>
         </div>
       ))}
     </div>
@@ -176,10 +208,12 @@ export async function getStaticProps() {
   const { data } = await execute(query, {})
   const compoundv2Liquidates = data.compoundv2Liquidates as Array<Liquidate>
   const aavev2Liquidates = data.aavev2Liquidates as Array<Liquidate>
+  const venusLiquidates = data.venusLiquidates as Array<Liquidate>
   return {
     props: {
       liquidates: compoundv2Liquidates
         .concat(aavev2Liquidates)
+        .concat(venusLiquidates)
         .sort((a, b) => b.timestamp.localeCompare(a.timestamp)),
     },
     revalidate: 60, // ISR (incremental static regeneration) per minute

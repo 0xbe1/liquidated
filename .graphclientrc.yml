@@ -25,3 +25,16 @@ sources:
               to:
                 type: Query
                 field: aavev2Liquidates
+  - name: venus
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/messari/venus-protocol-bsc
+    transforms:
+      - rename:
+          renames:
+            - from:
+                type: Query
+                field: liquidates
+              to:
+                type: Query
+                field: venusLiquidates
