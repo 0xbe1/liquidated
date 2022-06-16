@@ -5,7 +5,6 @@ import { execute } from '../.graphclient'
 import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
-// TODO: warn aave v2 data
 function query(timestamp_gte: number) {
   return gql`
   {
@@ -246,7 +245,12 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
               { hour12: false }
             )}
           </div>
-          <div>{l.protocol.name}</div>
+          <div>
+            {l.protocol.name
+              .split(/[- ]+/)
+              .map((s) => s[0].toUpperCase() + s.slice(1))
+              .join(' ')}
+          </div>
           <div>
             {l.market.inputToken
               ? l.market.inputToken.symbol
