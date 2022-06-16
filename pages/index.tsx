@@ -235,7 +235,7 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
         <div>repaid</div>
         <div>collateral</div>
         <div>amount (usd)</div>
-        <div></div>
+        <div>txn</div>
       </div>
       {liquidates.map((l, i) => (
         <div key={i} className="grid w-full grid-cols-6">
