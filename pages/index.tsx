@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
 // fetch past n days of liquidations on build
-const PAST_N_DAYS = 1
+const PAST_N_DAYS = 3
 
 interface Liquidate {
   protocol: {
@@ -209,6 +209,7 @@ function query(timestamp_gte: number) {
       orderBy: timestamp
       orderDirection: desc
       where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      first: 1000
     ) {
       protocol {
         name
@@ -233,6 +234,7 @@ function query(timestamp_gte: number) {
       orderBy: timestamp
       orderDirection: desc
       where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      first: 1000
     ) {
       protocol {
         name
@@ -257,6 +259,7 @@ function query(timestamp_gte: number) {
       orderBy: timestamp
       orderDirection: desc
       where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      first: 1000
     ) {
       protocol {
         name
@@ -284,7 +287,10 @@ function query(timestamp_gte: number) {
 export async function getStaticProps() {
   const currentEpochSeconds = Math.floor(new Date().getTime() / 1000)
   // TODO: get a typesafe data https://github.com/graphprotocol/graph-client#typescript-support
-  const { data } = await execute(query(currentEpochSeconds - PAST_N_DAYS * 24 * 60 * 60), {})
+  const { data } = await execute(
+    query(currentEpochSeconds - PAST_N_DAYS * 24 * 60 * 60),
+    {}
+  )
   const compoundv2Liquidates = data.compoundv2Liquidates as Array<Liquidate>
   const aavev2Liquidates = data.aavev2Liquidates as Array<Liquidate>
   const venusLiquidates = data.venusLiquidates as Array<Liquidate>

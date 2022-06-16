@@ -4,6 +4,8 @@ sources:
       graphql:
         endpoint: https://api.thegraph.com/subgraphs/name/messari/compound-ethereum
     transforms:
+      - autoPagination:
+          validateSchema: true
       - rename:
           renames:
             - from:
@@ -17,6 +19,8 @@ sources:
       graphql:
         endpoint: https://api.thegraph.com/subgraphs/name/messari/aave-v2-ethereum
     transforms:
+      - autoPagination:
+          validateSchema: true
       - rename:
           renames:
             - from:
@@ -30,6 +34,8 @@ sources:
       graphql:
         endpoint: https://api.thegraph.com/subgraphs/name/messari/venus-protocol-bsc
     transforms:
+      - autoPagination:
+          validateSchema: true
       - rename:
           renames:
             - from:

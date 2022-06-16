@@ -500,7 +500,7 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [MarketHourlySnapshot!]!
-  venusLiquidates(
+  compoundv2Liquidates(
     skip: Int = 0
     first: Int = 100
     orderBy: Liquidate_orderBy
@@ -567,7 +567,7 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [_CircularBuffer!]!
-  compoundv2Liquidates(
+  venusLiquidates(
     skip: Int = 0
     first: Int = 100
     orderBy: Liquidate_orderBy
@@ -2276,16 +2276,16 @@ type LendingProtocol implements Protocol {
   dailyUsageMetrics(skip: Int = 0, first: Int = 100, orderBy: UsageMetricsDailySnapshot_orderBy, orderDirection: OrderDirection, where: UsageMetricsDailySnapshot_filter): [UsageMetricsDailySnapshot!]!
   """ Hourly usage metrics for this protocol """
   hourlyUsageMetrics(skip: Int = 0, first: Int = 100, orderBy: UsageMetricsHourlySnapshot_orderBy, orderDirection: OrderDirection, where: UsageMetricsHourlySnapshot_filter): [UsageMetricsHourlySnapshot!]!
-  """ Price Oracle used to calculate asset price in USD """
-  _priceOracle: Bytes
+  """ Store the ids of each market for easy iteration """
+  _marketIds: [String!]!
+  """ oracle for the protocol """
+  _priceOracle: String!
+  """ Liquidation penalty (the same for every market) """
+  _liquidationPenalty: BigDecimal!
   """ All markets that belong to this protocol. protocol.markets won't work, see https://github.com/graphprotocol/graph-ts/issues/219 
   """
   _marketIDs: [ID!]!
   _liquidationIncentive: BigDecimal!
-  """ Store the ids of each market for easy iteration """
-  _marketIds: [String!]!
-  """ Liquidation penalty (the same for every market) """
-  _liquidationPenalty: BigDecimal!
 }
 
 input LendingProtocol_filter {
@@ -2591,17 +2591,31 @@ input LendingProtocol_filter {
   mintedTokenSupplies_contains_nocase: [BigInt!]
   mintedTokenSupplies_not_contains: [BigInt!]
   mintedTokenSupplies_not_contains_nocase: [BigInt!]
-  _priceOracle: Bytes
-  _priceOracle_not: Bytes
+  _marketIds: [String!]
+  _marketIds_not: [String!]
+  _marketIds_contains: [String!]
+  _marketIds_contains_nocase: [String!]
+  _marketIds_not_contains: [String!]
+  _marketIds_not_contains_nocase: [String!]
+  _priceOracle: String
+  _priceOracle_not: String
+  _priceOracle_in: [String!]
+  _priceOracle_not_in: [String!]
+  _priceOracle_contains: String
+  _priceOracle_not_contains: String
+  _liquidationPenalty: BigDecimal
+  _liquidationPenalty_not: BigDecimal
+  _liquidationPenalty_gt: BigDecimal
+  _liquidationPenalty_lt: BigDecimal
+  _liquidationPenalty_gte: BigDecimal
+  _liquidationPenalty_lte: BigDecimal
+  _liquidationPenalty_in: [BigDecimal!]
+  _liquidationPenalty_not_in: [BigDecimal!]
   _priceOracle_gt: String
   _priceOracle_lt: String
   _priceOracle_gte: String
   _priceOracle_lte: String
-  _priceOracle_in: [Bytes!]
-  _priceOracle_not_in: [Bytes!]
-  _priceOracle_contains: Bytes
   _priceOracle_contains_nocase: String
-  _priceOracle_not_contains: Bytes
   _priceOracle_not_contains_nocase: String
   _priceOracle_starts_with: String
   _priceOracle_starts_with_nocase: String
@@ -2625,20 +2639,6 @@ input LendingProtocol_filter {
   _liquidationIncentive_lte: BigDecimal
   _liquidationIncentive_in: [BigDecimal!]
   _liquidationIncentive_not_in: [BigDecimal!]
-  _marketIds: [String!]
-  _marketIds_not: [String!]
-  _marketIds_contains: [String!]
-  _marketIds_contains_nocase: [String!]
-  _marketIds_not_contains: [String!]
-  _marketIds_not_contains_nocase: [String!]
-  _liquidationPenalty: BigDecimal
-  _liquidationPenalty_not: BigDecimal
-  _liquidationPenalty_gt: BigDecimal
-  _liquidationPenalty_lt: BigDecimal
-  _liquidationPenalty_gte: BigDecimal
-  _liquidationPenalty_lte: BigDecimal
-  _liquidationPenalty_in: [BigDecimal!]
-  _liquidationPenalty_not_in: [BigDecimal!]
 }
 
 enum LendingProtocol_orderBy {
@@ -2678,11 +2678,11 @@ enum LendingProtocol_orderBy {
   mintedTokenSupplies
   dailyUsageMetrics
   hourlyUsageMetrics
+  _marketIds
   _priceOracle
+  _liquidationPenalty
   _marketIDs
   _liquidationIncentive
-  _marketIds
-  _liquidationPenalty
 }
 
 enum LendingType {
@@ -3052,6 +3052,8 @@ type Market {
   """ Sum of all historical deposits in USD (only considers deposits and not withdrawals) 
   """
   cumulativeDepositUSD: BigDecimal!
+  """ Current amount of borrows in native underlying unit """
+  _currentBorrowBalance: BigInt!
   """ Current balance of all borrowed/minted assets (not historical cumulative), in USD 
   """
   totalBorrowBalanceUSD: BigDecimal!
@@ -3064,9 +3066,12 @@ type Market {
   inputTokenBalance: BigInt!
   """ Price per share of input token in USD """
   inputTokenPriceUSD: BigDecimal!
-  """ Amount of input token per full share of output token. Only applies when the output token exists 
+  """ Amount of input token per full share of output token. Only applies when the output token exists (note this is a ratio and not a percentage value, i.e. 1.05 instead of 105%) 
   """
-  exchangeRate: BigDecimal!
+  exchangeRate: BigDecimal
+  _reserveFactor: BigDecimal!
+  """ Most recent block height seen for rate updates """
+  _lastUpdateBlock: BigInt!
   """ Market daily snapshots """
   dailySnapshots(skip: Int = 0, first: Int = 100, orderBy: MarketDailySnapshot_orderBy, orderDirection: OrderDirection, where: MarketDailySnapshot_filter): [MarketDailySnapshot!]!
   """ Market hourly snapshots """
@@ -3074,12 +3079,6 @@ type Market {
   _cumulativeSupplySideRevenueUSD: BigDecimal!
   _cumulativeProtocolSideRevenueUSD: BigDecimal!
   _cumulativeTotalRevenueUSD: BigDecimal!
-  """ Market reserve factor """
-  _reserveFactor: BigDecimal!
-  """ Current amount of borrows in native underlying unit """
-  _currentBorrowBalance: BigInt!
-  """ Most recent block height seen for rate updates """
-  _lastUpdateBlock: BigInt!
 }
 
 type MarketDailySnapshot {
@@ -3841,6 +3840,14 @@ input Market_filter {
   cumulativeDepositUSD_lte: BigDecimal
   cumulativeDepositUSD_in: [BigDecimal!]
   cumulativeDepositUSD_not_in: [BigDecimal!]
+  _currentBorrowBalance: BigInt
+  _currentBorrowBalance_not: BigInt
+  _currentBorrowBalance_gt: BigInt
+  _currentBorrowBalance_lt: BigInt
+  _currentBorrowBalance_gte: BigInt
+  _currentBorrowBalance_lte: BigInt
+  _currentBorrowBalance_in: [BigInt!]
+  _currentBorrowBalance_not_in: [BigInt!]
   totalBorrowBalanceUSD: BigDecimal
   totalBorrowBalanceUSD_not: BigDecimal
   totalBorrowBalanceUSD_gt: BigDecimal
@@ -3889,6 +3896,22 @@ input Market_filter {
   exchangeRate_lte: BigDecimal
   exchangeRate_in: [BigDecimal!]
   exchangeRate_not_in: [BigDecimal!]
+  _reserveFactor: BigDecimal
+  _reserveFactor_not: BigDecimal
+  _reserveFactor_gt: BigDecimal
+  _reserveFactor_lt: BigDecimal
+  _reserveFactor_gte: BigDecimal
+  _reserveFactor_lte: BigDecimal
+  _reserveFactor_in: [BigDecimal!]
+  _reserveFactor_not_in: [BigDecimal!]
+  _lastUpdateBlock: BigInt
+  _lastUpdateBlock_not: BigInt
+  _lastUpdateBlock_gt: BigInt
+  _lastUpdateBlock_lt: BigInt
+  _lastUpdateBlock_gte: BigInt
+  _lastUpdateBlock_lte: BigInt
+  _lastUpdateBlock_in: [BigInt!]
+  _lastUpdateBlock_not_in: [BigInt!]
   _cumulativeSupplySideRevenueUSD: BigDecimal
   _cumulativeSupplySideRevenueUSD_not: BigDecimal
   _cumulativeSupplySideRevenueUSD_gt: BigDecimal
@@ -3913,30 +3936,6 @@ input Market_filter {
   _cumulativeTotalRevenueUSD_lte: BigDecimal
   _cumulativeTotalRevenueUSD_in: [BigDecimal!]
   _cumulativeTotalRevenueUSD_not_in: [BigDecimal!]
-  _reserveFactor: BigDecimal
-  _reserveFactor_not: BigDecimal
-  _reserveFactor_gt: BigDecimal
-  _reserveFactor_lt: BigDecimal
-  _reserveFactor_gte: BigDecimal
-  _reserveFactor_lte: BigDecimal
-  _reserveFactor_in: [BigDecimal!]
-  _reserveFactor_not_in: [BigDecimal!]
-  _currentBorrowBalance: BigInt
-  _currentBorrowBalance_not: BigInt
-  _currentBorrowBalance_gt: BigInt
-  _currentBorrowBalance_lt: BigInt
-  _currentBorrowBalance_gte: BigInt
-  _currentBorrowBalance_lte: BigInt
-  _currentBorrowBalance_in: [BigInt!]
-  _currentBorrowBalance_not_in: [BigInt!]
-  _lastUpdateBlock: BigInt
-  _lastUpdateBlock_not: BigInt
-  _lastUpdateBlock_gt: BigInt
-  _lastUpdateBlock_lt: BigInt
-  _lastUpdateBlock_gte: BigInt
-  _lastUpdateBlock_lte: BigInt
-  _lastUpdateBlock_in: [BigInt!]
-  _lastUpdateBlock_not_in: [BigInt!]
 }
 
 enum Market_orderBy {
@@ -3985,20 +3984,20 @@ enum Market_orderBy {
   rates
   totalDepositBalanceUSD
   cumulativeDepositUSD
+  _currentBorrowBalance
   totalBorrowBalanceUSD
   cumulativeBorrowUSD
   cumulativeLiquidateUSD
   inputTokenBalance
   inputTokenPriceUSD
   exchangeRate
+  _reserveFactor
+  _lastUpdateBlock
   dailySnapshots
   hourlySnapshots
   _cumulativeSupplySideRevenueUSD
   _cumulativeProtocolSideRevenueUSD
   _cumulativeTotalRevenueUSD
-  _reserveFactor
-  _currentBorrowBalance
-  _lastUpdateBlock
 }
 
 enum Network {
@@ -5789,11 +5788,21 @@ enum UsageMetricsHourlySnapshot_orderBy {
 }
 
 type _CircularBuffer {
+  """ 'CIRCULAR_BUFFER' """
   id: ID!
+  """ Array of sorted block numbers sorted continuously """
   blocks: [Int!]!
+  """ The index in the blocks array which will be used with the newest block to calculate block speed (Usally set to about a day before newest block) 
+  """
   windowStartIndex: Int!
+  """ The next index in the blocks array that will be replaced with the newest block 
+  """
   nextIndex: Int!
+  """ This determines the size of the blocks array. Should be set to contain at least a days worth of blocks according to a 1 day window for measuring speed
+  """
   bufferSize: Int!
+  """ The current calculated number of blocks per day based on calculated block speed 
+  """
   blocksPerDay: BigDecimal!
 }
 
