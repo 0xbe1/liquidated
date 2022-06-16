@@ -190,11 +190,12 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
           <div>{l.asset.symbol}</div>
           <div>{parseFloat(l.amountUSD).toFixed(2)}</div>
           <a
+            className="truncate hover:underline"
             href={`https://${
               l.protocol.network === 'BSC' ? 'bscscan.com' : 'etherscan.io'
             }/tx/${l.hash}`}
           >
-            🔗
+            {l.hash}
           </a>
         </div>
       ))}
