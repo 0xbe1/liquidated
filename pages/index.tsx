@@ -39,17 +39,11 @@ const Home: NextPage<{
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
         <title>📺 liquidated live</title>
-        <meta
-          name="description"
-          content="most recent liquidations powered by Messari Subgraphs."
-        />
+        <meta name="description" content="Liquidation happening ..." />
         <meta property="og:url" content="https://liquidated.live/" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="They BUIDL" />
-        <meta
-          property="og:description"
-          content="most recent liquidations powered by Messari Subgraphs."
-        />
+        <meta property="og:title" content="📺 liquidated live" />
+        <meta property="og:description" content="liquidation happening ..." />
         <meta
           property="og:image"
           content="https://liquidated.live/og-preview.png"
@@ -57,11 +51,8 @@ const Home: NextPage<{
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="liquidated.live" />
         <meta property="twitter:url" content="https://liquidated.live/" />
-        <meta name="twitter:title" content="They BUIDL" />
-        <meta
-          name="twitter:description"
-          content="most recent liquidations powered by Messari Subgraphs."
-        />
+        <meta name="twitter:title" content="📺 liquidated live" />
+        <meta name="twitter:description" content="liquidation happening ..." />
         <meta
           name="twitter:image"
           content="https://liquidated.live/og-preview.png"
