@@ -5,85 +5,6 @@ import { execute } from '../.graphclient'
 import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
-function query(timestamp_gte: number) {
-  return gql`
-  {
-    compoundv2Liquidates(
-      orderBy: timestamp
-      orderDirection: desc
-      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
-    ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      market {
-        inputToken {
-          symbol
-        }
-      }
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
-    }
-    aavev2Liquidates(
-      orderBy: timestamp
-      orderDirection: desc
-      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
-    ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      market {
-        inputTokens {
-          symbol
-        }
-      }
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
-    }
-    venusLiquidates(
-      orderBy: timestamp
-      orderDirection: desc
-      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
-    ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      market {
-        inputToken {
-          symbol
-        }
-      }
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
-    }
-  }
-`
-}
-
 interface Liquidate {
   protocol: {
     name: string
@@ -241,8 +162,14 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
         <div key={i} className="grid w-full grid-cols-6">
           <div>
             {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString(
-              'en-US',
-              { hour12: false }
+              undefined,
+              {
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hour12: false,
+              }
             )}
           </div>
           <div>
@@ -270,6 +197,85 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
       ))}
     </div>
   )
+}
+
+function query(timestamp_gte: number) {
+  return gql`
+  {
+    compoundv2Liquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+    ) {
+      protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
+      market {
+        inputToken {
+          symbol
+        }
+      }
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
+    aavev2Liquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+    ) {
+      protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
+      market {
+        inputTokens {
+          symbol
+        }
+      }
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
+    venusLiquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+    ) {
+      protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
+      market {
+        inputToken {
+          symbol
+        }
+      }
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
+  }
+`
 }
 
 export async function getStaticProps() {
