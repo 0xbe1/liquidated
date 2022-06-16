@@ -5,15 +5,14 @@ import { execute } from '../.graphclient'
 import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
-// TODO: add timestamp_ge and remove first
 // TODO: slider to pick amountUSD_gt
-const query = gql`
+function query(timestamp_gte: number) {
+  return gql`
   {
     compoundv2Liquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 0 }
-      first: 100
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
     ) {
       protocol {
         name
@@ -37,8 +36,7 @@ const query = gql`
     aavev2Liquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 0 }
-      first: 100
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
     ) {
       protocol {
         name
@@ -62,8 +60,7 @@ const query = gql`
     venusLiquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 0 }
-      first: 100
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
     ) {
       protocol {
         name
@@ -86,6 +83,7 @@ const query = gql`
     }
   }
 `
+}
 
 interface Liquidate {
   protocol: {
@@ -205,7 +203,9 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
 }
 
 export async function getStaticProps() {
-  const { data } = await execute(query, {})
+  const currentEpochSeconds = Math.floor(new Date().getTime() / 1000)
+  console.log(currentEpochSeconds)
+  const { data } = await execute(query(currentEpochSeconds - 24 * 60 * 60), {})
   const compoundv2Liquidates = data.compoundv2Liquidates as Array<Liquidate>
   const aavev2Liquidates = data.aavev2Liquidates as Array<Liquidate>
   const venusLiquidates = data.venusLiquidates as Array<Liquidate>
