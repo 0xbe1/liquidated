@@ -5,6 +5,10 @@ import { execute } from '../.graphclient'
 import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
+// TODO: add timestamp_ge and remove first
+// TODO: add network
+// TODO: slider to pick amountUSD_gt
+// TODO: add venus
 const query = gql`
   {
     compoundv2Liquidates(
@@ -15,6 +19,7 @@ const query = gql`
     ) {
       protocol {
         name
+        network
       }
       hash
       timestamp
@@ -39,6 +44,7 @@ const query = gql`
     ) {
       protocol {
         name
+        network
       }
       hash
       timestamp
@@ -59,7 +65,10 @@ const query = gql`
 `
 
 interface Liquidate {
-  protocol: { name: string }
+  protocol: { 
+    name: string
+    network: string
+  }
   hash: string
   timestamp: string
   from: string
@@ -146,7 +155,7 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
       {liquidates.map((l, i) => (
         <div key={i} className="grid w-full grid-cols-6">
           <div>
-            {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString('en-US')}
+            {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString('en-US', {hour12:false})}
           </div>
           <div>{l.protocol.name}</div>
           <div>
