@@ -37,11 +37,11 @@ const Home: NextPage<{
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
         <title>📺 liquidated live</title>
-        <meta name="description" content="Liquidation happening ..." />
+        <meta name="description" content="liquidations happening ..." />
         <meta property="og:url" content="https://liquidated.live/" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="📺 liquidated live" />
-        <meta property="og:description" content="liquidation happening ..." />
+        <meta property="og:description" content="liquidations happening ..." />
         <meta
           property="og:image"
           content="https://liquidated.live/og-preview.png"
@@ -50,7 +50,7 @@ const Home: NextPage<{
         <meta property="twitter:domain" content="liquidated.live" />
         <meta property="twitter:url" content="https://liquidated.live/" />
         <meta name="twitter:title" content="📺 liquidated live" />
-        <meta name="twitter:description" content="liquidation happening ..." />
+        <meta name="twitter:description" content="liquidations happening ..." />
         <meta
           name="twitter:image"
           content="https://liquidated.live/og-preview.png"
