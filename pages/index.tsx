@@ -163,7 +163,7 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
         <div>protocol</div>
         <div>repaid</div>
         <div>collateral</div>
-        <div>amount (usd)</div>
+        <div>amount</div>
         <div>txn</div>
       </div>
       {liquidates.map((l, i) => (
@@ -188,7 +188,14 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
           </div>
           <div>{l.market.inputToken ? l.market.inputToken.symbol : '🔨'}</div>
           <div>{l.asset.symbol}</div>
-          <div>{parseFloat(l.amountUSD).toFixed(2)}</div>
+          <div>
+            {parseFloat(l.amountUSD).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              style: 'currency',
+              currency: 'USD',
+            })}
+          </div>
           <a
             className="truncate hover:underline"
             href={`https://${
