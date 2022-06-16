@@ -7,6 +7,7 @@ import Footer from '../components/footer'
 
 // fetch past n days of liquidations on build
 const PAST_N_DAYS = 3
+const LOAD_NUM = 100
 
 interface Liquidate {
   protocol: {
@@ -30,6 +31,7 @@ const Home: NextPage<{
   liquidates: Array<Liquidate>
 }> = ({ liquidates }) => {
   const [amountThreshold, setAmountThreshold] = useState(2)
+  const [num, setNum] = useState(LOAD_NUM)
 
   function handleChange(event: React.FormEvent<HTMLInputElement>) {
     setAmountThreshold(parseInt(event.currentTarget.value))
@@ -130,10 +132,24 @@ const Home: NextPage<{
             <span>1e6</span>
           </div>
           <Liquidates
-            liquidates={liquidates.filter(
-              (l) => parseInt(l.amountUSD) >= Math.pow(10, amountThreshold)
-            )}
+            liquidates={liquidates
+              .filter(
+                (l) => parseInt(l.amountUSD) >= Math.pow(10, amountThreshold)
+              )
+              .slice(0, num)}
           />
+          <div className="flex justify-center pb-4">
+            {num < liquidates.length ? (
+              <button
+                className="hover:underline"
+                onClick={() => setNum((prevNum) => prevNum + LOAD_NUM)}
+              >
+                👇 load more
+              </button>
+            ) : (
+              'The end!'
+            )}
+          </div>
         </div>
       </main>
       <Footer />
