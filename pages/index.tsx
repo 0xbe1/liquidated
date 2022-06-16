@@ -58,7 +58,7 @@ const Home: NextPage<{
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-3/5">
+      <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-2/3">
         <div className="w-full">
           <p className="my-5 text-3xl font-bold text-purple-600">
             📺 liquidated live{' '}
@@ -172,6 +172,7 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
             {new Date(parseInt(l.timestamp) * 1000).toLocaleTimeString(
               undefined,
               {
+                month: 'numeric',
                 day: 'numeric',
                 hour: 'numeric',
                 minute: 'numeric',
