@@ -1,11 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import React from 'react'
+import React, { useState } from 'react'
 import { execute } from '../.graphclient'
 import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
-// TODO: slider to pick amountUSD_gt
+// TODO: warn aave v2 data
 function query(timestamp_gte: number) {
   return gql`
   {
@@ -106,10 +106,16 @@ interface Liquidate {
 const Home: NextPage<{
   liquidates: Array<Liquidate>
 }> = ({ liquidates }) => {
+  const [amountThreshold, setAmountThreshold] = useState(2)
+
+  function handleChange(event: React.FormEvent<HTMLInputElement>) {
+    setAmountThreshold(parseInt(event.currentTarget.value))
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
-        <title>Liquidated 🔥</title>
+        <title>📺 liquidated live</title>
         <meta
           name="description"
           content="most recent liquidations powered by Messari Subgraphs."
@@ -142,19 +148,51 @@ const Home: NextPage<{
 
       <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-3/5">
         <div className="w-full">
-          <p className="my-10 text-6xl font-bold text-purple-600">
-            liquidated 🔥
+          <p className="my-5 text-3xl font-bold text-purple-600">
+            📺 liquidated live{' '}
+            <span className="text-sm">
+              powered by{' '}
+              <a
+                className="underline"
+                href="https://github.com/messari/subgraphs"
+              >
+                Messari Subgraphs
+              </a>
+            </span>
           </p>
-          <p className="my-5">
-            most recent liquidations powered by{' '}
-            <a
-              className="underline"
-              href="https://github.com/messari/subgraphs"
-            >
-              Messari Subgraphs
-            </a>
-          </p>
-          <Liquidates liquidates={liquidates} />
+          <p className="my-5">👇 liquidated threshold (usd)</p>
+          <input
+            type="range"
+            min="0"
+            max="6"
+            value={amountThreshold}
+            onChange={handleChange}
+            className="range range-primary"
+            step="1"
+          />
+          <div className="flex w-full justify-between px-2 text-xs">
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+          </div>
+          <div className="flex w-full justify-between px-2 text-xs">
+            <span>1e0</span>
+            <span>1e1</span>
+            <span>1e2</span>
+            <span>1e3</span>
+            <span>1e4</span>
+            <span>1e5</span>
+            <span>1e6</span>
+          </div>
+          <Liquidates
+            liquidates={liquidates.filter(
+              (l) => parseInt(l.amountUSD) >= Math.pow(10, amountThreshold)
+            )}
+          />
         </div>
       </main>
       <Footer />
@@ -204,7 +242,7 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
 
 export async function getStaticProps() {
   const currentEpochSeconds = Math.floor(new Date().getTime() / 1000)
-  console.log(currentEpochSeconds)
+  // TODO: get a typesafe data https://github.com/graphprotocol/graph-client#typescript-support
   const { data } = await execute(query(currentEpochSeconds - 24 * 60 * 60), {})
   const compoundv2Liquidates = data.compoundv2Liquidates as Array<Liquidate>
   const aavev2Liquidates = data.aavev2Liquidates as Array<Liquidate>
