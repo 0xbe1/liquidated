@@ -5,6 +5,9 @@ import { execute } from '../.graphclient'
 import gql from 'graphql-tag'
 import Footer from '../components/footer'
 
+// fetch past n days of liquidations on build
+const PAST_N_DAYS = 1
+
 interface Liquidate {
   protocol: {
     name: string
@@ -281,7 +284,7 @@ function query(timestamp_gte: number) {
 export async function getStaticProps() {
   const currentEpochSeconds = Math.floor(new Date().getTime() / 1000)
   // TODO: get a typesafe data https://github.com/graphprotocol/graph-client#typescript-support
-  const { data } = await execute(query(currentEpochSeconds - 24 * 60 * 60), {})
+  const { data } = await execute(query(currentEpochSeconds - PAST_N_DAYS * 24 * 60 * 60), {})
   const compoundv2Liquidates = data.compoundv2Liquidates as Array<Liquidate>
   const aavev2Liquidates = data.aavev2Liquidates as Array<Liquidate>
   const venusLiquidates = data.venusLiquidates as Array<Liquidate>
