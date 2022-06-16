@@ -33,10 +33,6 @@ const Home: NextPage<{
   const [amountThreshold, setAmountThreshold] = useState(2)
   const [num, setNum] = useState(LOAD_NUM)
 
-  function handleChange(event: React.FormEvent<HTMLInputElement>) {
-    setAmountThreshold(parseInt(event.currentTarget.value))
-  }
-
   return (
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
@@ -109,7 +105,9 @@ const Home: NextPage<{
             min="0"
             max="6"
             value={amountThreshold}
-            onChange={handleChange}
+            onChange={(event) =>
+              setAmountThreshold(parseInt(event.currentTarget.value))
+            }
             className="range range-primary"
             step="1"
           />
