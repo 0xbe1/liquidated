@@ -172,12 +172,7 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
               .map((s) => s[0].toUpperCase() + s.slice(1))
               .join(' ')}
           </div>
-          <div>
-            {l.market.inputToken
-              ? l.market.inputToken.symbol
-              : l.market.inputTokens![0].symbol}
-            {l.protocol.name === 'Aave-v2' && ' 🔨'}
-          </div>
+          <div>{l.market.inputToken ? l.market.inputToken.symbol : '🔨'}</div>
           <div>{l.asset.symbol}</div>
           <div>{parseFloat(l.amountUSD).toFixed(2)}</div>
           <a
