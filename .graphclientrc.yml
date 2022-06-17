@@ -44,3 +44,48 @@ sources:
               to:
                 type: Query
                 field: venusLiquidates
+  - name: makerdao
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/messari/makerdao-ethereum
+    transforms:
+      - autoPagination:
+          validateSchema: true
+      - rename:
+          renames:
+            - from:
+                type: Query
+                field: liquidates
+              to:
+                type: Query
+                field: makerdaoLiquidates
+  - name: liquity
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/messari/liquity-ethereum
+    transforms:
+      - autoPagination:
+          validateSchema: true
+      - rename:
+          renames:
+            - from:
+                type: Query
+                field: liquidates
+              to:
+                type: Query
+                field: liquityLiquidates
+  - name: abracadabra
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/messari/abracadabra-money-ethereum
+    transforms:
+      - autoPagination:
+          validateSchema: true
+      - rename:
+          renames:
+            - from:
+                type: Query
+                field: liquidates
+              to:
+                type: Query
+                field: abracadabraLiquidates

@@ -18,10 +18,6 @@ interface Liquidate {
   timestamp: string
   from: string
   to: string
-  market: {
-    inputToken?: { symbol: string }
-    inputTokens?: { symbol: string }[]
-  }
   asset: { symbol: string }
   amountUSD: string
   profitUSD: string
@@ -58,7 +54,7 @@ const Home: NextPage<{
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-2/3">
+      <main className="flex w-full flex-1 items-center sm:w-5/6 lg:w-4/5">
         <div className="w-full">
           <p className="my-5 text-3xl font-bold text-purple-600">
             📺 liquidated live{' '}
@@ -208,11 +204,6 @@ function query(timestamp_gte: number) {
       timestamp
       from
       to
-      market {
-        inputToken {
-          symbol
-        }
-      }
       asset {
         symbol
       }
@@ -233,11 +224,6 @@ function query(timestamp_gte: number) {
       timestamp
       from
       to
-      market {
-        inputTokens {
-          symbol
-        }
-      }
       asset {
         symbol
       }
@@ -258,11 +244,66 @@ function query(timestamp_gte: number) {
       timestamp
       from
       to
-      market {
-        inputToken {
-          symbol
-        }
+      asset {
+        symbol
       }
+      amountUSD
+      profitUSD
+    }
+    makerdaoLiquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      first: 1000
+    ) {
+      protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
+    liquityLiquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      first: 1000
+    ) {
+      protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+    }
+    abracadabraLiquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      first: 1000
+    ) {
+      protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
       asset {
         symbol
       }
@@ -280,14 +321,18 @@ export async function getStaticProps() {
     query(currentEpochSeconds - PAST_N_DAYS * 24 * 60 * 60),
     {}
   )
-  const compoundv2Liquidates = data.compoundv2Liquidates as Array<Liquidate>
-  const aavev2Liquidates = data.aavev2Liquidates as Array<Liquidate>
-  const venusLiquidates = data.venusLiquidates as Array<Liquidate>
   return {
     props: {
-      liquidates: compoundv2Liquidates
-        .concat(aavev2Liquidates)
-        .concat(venusLiquidates)
+      liquidates: [
+        'compoundv2',
+        'aavev2',
+        'venus',
+        'makerdao',
+        'liquity',
+        'abracadabra',
+      ]
+        .map((p) => p + 'Liquidates')
+        .flatMap((q) => data[q] as Array<Liquidate>)
         .sort((a, b) => b.timestamp.localeCompare(a.timestamp)),
     },
     revalidate: 60, // ISR (incremental static regeneration) per minute
