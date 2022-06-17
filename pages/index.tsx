@@ -72,33 +72,6 @@ const Home: NextPage<{
               </a>
             </span>
           </p>
-          <div className="alert alert-warning shadow-sm">
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 flex-shrink-0 stroke-current"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-              <span>
-                Aave V2 "repaid" data issue will be resolved after{' '}
-                <a
-                  className="underline"
-                  href="https://okgraph.xyz/?q=QmQckK9fAqWKBxzsYaBDfz7mU1S59RzJ9S2YF4yzXjSiQg"
-                >
-                  the patch subgraph
-                </a>{' '}
-                syncs.
-              </span>
-            </div>
-          </div>
           <p className="my-5">👇 liquidated threshold (usd)</p>
           <input
             type="range"
@@ -161,9 +134,9 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
       <div className="grid grid-cols-6 text-purple-600">
         <div>time (locale)</div>
         <div>protocol</div>
-        <div>repaid</div>
         <div>collateral</div>
         <div>amount</div>
+        <div>profit</div>
         <div>txn</div>
       </div>
       {liquidates.map((l, i) => (
@@ -187,10 +160,17 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
               .map((s) => s[0].toUpperCase() + s.slice(1))
               .join(' ')}
           </div>
-          <div>{l.market.inputToken ? l.market.inputToken.symbol : '🔨'}</div>
           <div>{l.asset.symbol}</div>
           <div>
             {parseFloat(l.amountUSD).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              style: 'currency',
+              currency: 'USD',
+            })}
+          </div>
+          <div>
+            {parseFloat(l.profitUSD).toLocaleString('en-US', {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
               style: 'currency',
