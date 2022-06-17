@@ -189,6 +189,22 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
 
 function query(timestamp_gte: number) {
   return gql`
+  fragment LiquidateFields on Liquidate {
+    protocol {
+        name
+        network
+      }
+      hash
+      timestamp
+      from
+      to
+      asset {
+        symbol
+      }
+      amountUSD
+      profitUSD
+  }
+
   {
     compoundv2Liquidates(
       orderBy: timestamp
@@ -196,19 +212,7 @@ function query(timestamp_gte: number) {
       where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
       first: 1000
     ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
+      ...LiquidateFields
     }
     aavev2Liquidates(
       orderBy: timestamp
@@ -216,99 +220,39 @@ function query(timestamp_gte: number) {
       where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
       first: 1000
     ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
+      ...LiquidateFields
     }
     venusLiquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      where: { timestamp_gte: ${timestamp_gte} }
       first: 1000
     ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
+      ...LiquidateFields
     }
     makerdaoLiquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      where: { timestamp_gte: ${timestamp_gte} }
       first: 1000
     ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
+      ...LiquidateFields
     }
     liquityLiquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      where: { timestamp_gte: ${timestamp_gte} }
       first: 1000
     ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
+      ...LiquidateFields
     }
     abracadabraLiquidates(
       orderBy: timestamp
       orderDirection: desc
-      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      where: { timestamp_gte: ${timestamp_gte} }
       first: 1000
     ) {
-      protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
+      ...LiquidateFields
     }
   }
 `
