@@ -68,7 +68,7 @@ const Home: NextPage<{
               </a>
             </span>
           </p>
-          <p className="my-5">👇 liquidated threshold (usd)</p>
+          <p className="my-5">💰 liquidated amount {'>='}</p>
           <input
             type="range"
             min="0"
@@ -81,22 +81,13 @@ const Home: NextPage<{
             step="1"
           />
           <div className="flex w-full justify-between px-2 text-xs">
-            <span>|</span>
-            <span>|</span>
-            <span>|</span>
-            <span>|</span>
-            <span>|</span>
-            <span>|</span>
-            <span>|</span>
-          </div>
-          <div className="flex w-full justify-between px-2 text-xs">
-            <span>1e0</span>
-            <span>1e1</span>
-            <span>1e2</span>
-            <span>1e3</span>
-            <span>1e4</span>
-            <span>1e5</span>
-            <span>1e6</span>
+            <span>1</span>
+            <span>10</span>
+            <span>100</span>
+            <span>1k</span>
+            <span>10k</span>
+            <span>100k</span>
+            <span>1m</span>
           </div>
           <Liquidates
             liquidates={liquidates
