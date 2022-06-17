@@ -500,7 +500,7 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [MarketHourlySnapshot!]!
-  compoundv2Liquidates(
+  abracadabraLiquidates(
     skip: Int = 0
     first: Int = 100
     orderBy: Liquidate_orderBy
@@ -541,6 +541,88 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [ActiveAccount!]!
+  liquidateProxy(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): LiquidateProxy
+  liquidateProxies(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: LiquidateProxy_orderBy
+    orderDirection: OrderDirection
+    where: LiquidateProxy_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [LiquidateProxy!]!
+  liquityLiquidates(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Liquidate_orderBy
+    orderDirection: OrderDirection
+    where: Liquidate_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Liquidate!]!
+  trove(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): _Trove
+  troves(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: _Trove_orderBy
+    orderDirection: OrderDirection
+    where: _Trove_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [_Trove!]!
+  ironbankLiquidates(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Liquidate_orderBy
+    orderDirection: OrderDirection
+    where: Liquidate_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Liquidate!]!
   circularBuffer(
     id: ID!
     """
@@ -634,6 +716,21 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [_Proxy!]!
+  compoundv2Liquidates(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Liquidate_orderBy
+    orderDirection: OrderDirection
+    where: Liquidate_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Liquidate!]!
   venusLiquidates(
     skip: Int = 0
     first: Int = 100
@@ -649,88 +746,6 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Liquidate!]!
-  abracadabraLiquidates(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Liquidate_orderBy
-    orderDirection: OrderDirection
-    where: Liquidate_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Liquidate!]!
-  liquidateProxy(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): LiquidateProxy
-  liquidateProxies(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: LiquidateProxy_orderBy
-    orderDirection: OrderDirection
-    where: LiquidateProxy_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [LiquidateProxy!]!
-  liquityLiquidates(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Liquidate_orderBy
-    orderDirection: OrderDirection
-    where: Liquidate_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Liquidate!]!
-  trove(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): _Trove
-  troves(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: _Trove_orderBy
-    orderDirection: OrderDirection
-    where: _Trove_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [_Trove!]!
 }
 
 type Subscription {
@@ -1256,6 +1271,58 @@ type Subscription {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [ActiveAccount!]!
+  liquidateProxy(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): LiquidateProxy
+  liquidateProxies(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: LiquidateProxy_orderBy
+    orderDirection: OrderDirection
+    where: LiquidateProxy_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [LiquidateProxy!]!
+  trove(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): _Trove
+  troves(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: _Trove_orderBy
+    orderDirection: OrderDirection
+    where: _Trove_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [_Trove!]!
   circularBuffer(
     id: ID!
     """
@@ -1334,58 +1401,6 @@ type Subscription {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [_Proxy!]!
-  liquidateProxy(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): LiquidateProxy
-  liquidateProxies(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: LiquidateProxy_orderBy
-    orderDirection: OrderDirection
-    where: LiquidateProxy_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [LiquidateProxy!]!
-  trove(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): _Trove
-  troves(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: _Trove_orderBy
-    orderDirection: OrderDirection
-    where: _Trove_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [_Trove!]!
 }
 
 type Account {
@@ -2529,17 +2544,17 @@ type LendingProtocol implements Protocol {
   dailyUsageMetrics(skip: Int = 0, first: Int = 100, orderBy: UsageMetricsDailySnapshot_orderBy, orderDirection: OrderDirection, where: UsageMetricsDailySnapshot_filter): [UsageMetricsDailySnapshot!]!
   """ Hourly usage metrics for this protocol """
   hourlyUsageMetrics(skip: Int = 0, first: Int = 100, orderBy: UsageMetricsHourlySnapshot_orderBy, orderDirection: OrderDirection, where: UsageMetricsHourlySnapshot_filter): [UsageMetricsHourlySnapshot!]!
-  """ Store the ids of each market for easy iteration """
-  _marketIds: [String!]!
+  marketIDList: [String!]!
   """ oracle for the protocol """
   _priceOracle: String!
-  """ Liquidation penalty (the same for every market) """
-  _liquidationPenalty: BigDecimal!
-  marketIDList: [String!]!
   """ All markets that belong to this protocol. protocol.markets won't work, see https://github.com/graphprotocol/graph-ts/issues/219 
   """
   _marketIDs: [ID!]!
   _liquidationIncentive: BigDecimal!
+  """ Store the ids of each market for easy iteration """
+  _marketIds: [String!]!
+  """ Liquidation penalty (the same for every market) """
+  _liquidationPenalty: BigDecimal!
 }
 
 input LendingProtocol_filter {
@@ -2845,37 +2860,23 @@ input LendingProtocol_filter {
   mintedTokenSupplies_contains_nocase: [BigInt!]
   mintedTokenSupplies_not_contains: [BigInt!]
   mintedTokenSupplies_not_contains_nocase: [BigInt!]
-  _marketIds: [String!]
-  _marketIds_not: [String!]
-  _marketIds_contains: [String!]
-  _marketIds_contains_nocase: [String!]
-  _marketIds_not_contains: [String!]
-  _marketIds_not_contains_nocase: [String!]
-  _priceOracle: String
-  _priceOracle_not: String
-  _priceOracle_in: [String!]
-  _priceOracle_not_in: [String!]
-  _priceOracle_contains: String
-  _priceOracle_not_contains: String
-  _liquidationPenalty: BigDecimal
-  _liquidationPenalty_not: BigDecimal
-  _liquidationPenalty_gt: BigDecimal
-  _liquidationPenalty_lt: BigDecimal
-  _liquidationPenalty_gte: BigDecimal
-  _liquidationPenalty_lte: BigDecimal
-  _liquidationPenalty_in: [BigDecimal!]
-  _liquidationPenalty_not_in: [BigDecimal!]
   marketIDList: [String!]
   marketIDList_not: [String!]
   marketIDList_contains: [String!]
   marketIDList_contains_nocase: [String!]
   marketIDList_not_contains: [String!]
   marketIDList_not_contains_nocase: [String!]
+  _priceOracle: String
+  _priceOracle_not: String
   _priceOracle_gt: String
   _priceOracle_lt: String
   _priceOracle_gte: String
   _priceOracle_lte: String
+  _priceOracle_in: [String!]
+  _priceOracle_not_in: [String!]
+  _priceOracle_contains: String
   _priceOracle_contains_nocase: String
+  _priceOracle_not_contains: String
   _priceOracle_not_contains_nocase: String
   _priceOracle_starts_with: String
   _priceOracle_starts_with_nocase: String
@@ -2899,6 +2900,20 @@ input LendingProtocol_filter {
   _liquidationIncentive_lte: BigDecimal
   _liquidationIncentive_in: [BigDecimal!]
   _liquidationIncentive_not_in: [BigDecimal!]
+  _marketIds: [String!]
+  _marketIds_not: [String!]
+  _marketIds_contains: [String!]
+  _marketIds_contains_nocase: [String!]
+  _marketIds_not_contains: [String!]
+  _marketIds_not_contains_nocase: [String!]
+  _liquidationPenalty: BigDecimal
+  _liquidationPenalty_not: BigDecimal
+  _liquidationPenalty_gt: BigDecimal
+  _liquidationPenalty_lt: BigDecimal
+  _liquidationPenalty_gte: BigDecimal
+  _liquidationPenalty_lte: BigDecimal
+  _liquidationPenalty_in: [BigDecimal!]
+  _liquidationPenalty_not_in: [BigDecimal!]
 }
 
 enum LendingProtocol_orderBy {
@@ -2938,12 +2953,12 @@ enum LendingProtocol_orderBy {
   mintedTokenSupplies
   dailyUsageMetrics
   hourlyUsageMetrics
-  _marketIds
-  _priceOracle
-  _liquidationPenalty
   marketIDList
+  _priceOracle
   _marketIDs
   _liquidationIncentive
+  _marketIds
+  _liquidationPenalty
 }
 
 enum LendingType {
@@ -3313,8 +3328,6 @@ type Market {
   """ Sum of all historical deposits in USD (only considers deposits and not withdrawals) 
   """
   cumulativeDepositUSD: BigDecimal!
-  """ Current amount of borrows in native underlying unit """
-  _currentBorrowBalance: BigInt!
   """ Current balance of all borrowed/minted assets (not historical cumulative), in USD 
   """
   totalBorrowBalanceUSD: BigDecimal!
@@ -3330,9 +3343,6 @@ type Market {
   """ Amount of input token per full share of output token. Only applies when the output token exists (note this is a ratio and not a percentage value, i.e. 1.05 instead of 105%) 
   """
   exchangeRate: BigDecimal
-  _reserveFactor: BigDecimal!
-  """ Most recent block height seen for rate updates """
-  _lastUpdateBlock: BigInt!
   """ Market daily snapshots """
   dailySnapshots(skip: Int = 0, first: Int = 100, orderBy: MarketDailySnapshot_orderBy, orderDirection: OrderDirection, where: MarketDailySnapshot_filter): [MarketDailySnapshot!]!
   """ Market hourly snapshots """
@@ -3341,6 +3351,11 @@ type Market {
   _cumulativeSupplySideRevenueUSD: BigDecimal!
   _cumulativeProtocolSideRevenueUSD: BigDecimal!
   _cumulativeTotalRevenueUSD: BigDecimal!
+  _reserveFactor: BigDecimal!
+  """ Current amount of borrows in native underlying unit """
+  _currentBorrowBalance: BigInt!
+  """ Most recent block height seen for rate updates """
+  _lastUpdateBlock: BigInt!
 }
 
 type MarketDailySnapshot {
@@ -4102,14 +4117,6 @@ input Market_filter {
   cumulativeDepositUSD_lte: BigDecimal
   cumulativeDepositUSD_in: [BigDecimal!]
   cumulativeDepositUSD_not_in: [BigDecimal!]
-  _currentBorrowBalance: BigInt
-  _currentBorrowBalance_not: BigInt
-  _currentBorrowBalance_gt: BigInt
-  _currentBorrowBalance_lt: BigInt
-  _currentBorrowBalance_gte: BigInt
-  _currentBorrowBalance_lte: BigInt
-  _currentBorrowBalance_in: [BigInt!]
-  _currentBorrowBalance_not_in: [BigInt!]
   totalBorrowBalanceUSD: BigDecimal
   totalBorrowBalanceUSD_not: BigDecimal
   totalBorrowBalanceUSD_gt: BigDecimal
@@ -4158,22 +4165,6 @@ input Market_filter {
   exchangeRate_lte: BigDecimal
   exchangeRate_in: [BigDecimal!]
   exchangeRate_not_in: [BigDecimal!]
-  _reserveFactor: BigDecimal
-  _reserveFactor_not: BigDecimal
-  _reserveFactor_gt: BigDecimal
-  _reserveFactor_lt: BigDecimal
-  _reserveFactor_gte: BigDecimal
-  _reserveFactor_lte: BigDecimal
-  _reserveFactor_in: [BigDecimal!]
-  _reserveFactor_not_in: [BigDecimal!]
-  _lastUpdateBlock: BigInt
-  _lastUpdateBlock_not: BigInt
-  _lastUpdateBlock_gt: BigInt
-  _lastUpdateBlock_lt: BigInt
-  _lastUpdateBlock_gte: BigInt
-  _lastUpdateBlock_lte: BigInt
-  _lastUpdateBlock_in: [BigInt!]
-  _lastUpdateBlock_not_in: [BigInt!]
   debtMultiplier: BigDecimal
   debtMultiplier_not: BigDecimal
   debtMultiplier_gt: BigDecimal
@@ -4206,6 +4197,30 @@ input Market_filter {
   _cumulativeTotalRevenueUSD_lte: BigDecimal
   _cumulativeTotalRevenueUSD_in: [BigDecimal!]
   _cumulativeTotalRevenueUSD_not_in: [BigDecimal!]
+  _reserveFactor: BigDecimal
+  _reserveFactor_not: BigDecimal
+  _reserveFactor_gt: BigDecimal
+  _reserveFactor_lt: BigDecimal
+  _reserveFactor_gte: BigDecimal
+  _reserveFactor_lte: BigDecimal
+  _reserveFactor_in: [BigDecimal!]
+  _reserveFactor_not_in: [BigDecimal!]
+  _currentBorrowBalance: BigInt
+  _currentBorrowBalance_not: BigInt
+  _currentBorrowBalance_gt: BigInt
+  _currentBorrowBalance_lt: BigInt
+  _currentBorrowBalance_gte: BigInt
+  _currentBorrowBalance_lte: BigInt
+  _currentBorrowBalance_in: [BigInt!]
+  _currentBorrowBalance_not_in: [BigInt!]
+  _lastUpdateBlock: BigInt
+  _lastUpdateBlock_not: BigInt
+  _lastUpdateBlock_gt: BigInt
+  _lastUpdateBlock_lt: BigInt
+  _lastUpdateBlock_gte: BigInt
+  _lastUpdateBlock_lte: BigInt
+  _lastUpdateBlock_in: [BigInt!]
+  _lastUpdateBlock_not_in: [BigInt!]
 }
 
 enum Market_orderBy {
@@ -4254,21 +4269,21 @@ enum Market_orderBy {
   rates
   totalDepositBalanceUSD
   cumulativeDepositUSD
-  _currentBorrowBalance
   totalBorrowBalanceUSD
   cumulativeBorrowUSD
   cumulativeLiquidateUSD
   inputTokenBalance
   inputTokenPriceUSD
   exchangeRate
-  _reserveFactor
-  _lastUpdateBlock
   dailySnapshots
   hourlySnapshots
   debtMultiplier
   _cumulativeSupplySideRevenueUSD
   _cumulativeProtocolSideRevenueUSD
   _cumulativeTotalRevenueUSD
+  _reserveFactor
+  _currentBorrowBalance
+  _lastUpdateBlock
 }
 
 enum Network {
@@ -5622,6 +5637,38 @@ enum InterestRate_orderBy {
   type
 }
 
+type LiquidateProxy {
+  """ { Transaction hash }-{ Log index } """
+  id: ID!
+  amount: BigInt!
+}
+
+input LiquidateProxy_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  amount: BigInt
+  amount_not: BigInt
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  amount_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+}
+
+enum LiquidateProxy_orderBy {
+  id
+  amount
+}
+
 type MarketHourlySnapshot {
   """ { Smart contract address of the market }-{ # of hours since Unix epoch time } 
   """
@@ -6058,6 +6105,72 @@ enum UsageMetricsHourlySnapshot_orderBy {
   timestamp
 }
 
+type _Trove {
+  """ Trove owner's address """
+  id: ID!
+  """ Amount of ETH owner has deposited """
+  collateral: BigInt!
+  """ Amount of LUSD owner has withdrawn """
+  debt: BigInt!
+  """ Total amount of ETH surplus owner can claim """
+  collateralSurplus: BigInt!
+  """ Last change to collateralSurplus """
+  collateralSurplusChange: BigInt!
+}
+
+input _Trove_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  collateral: BigInt
+  collateral_not: BigInt
+  collateral_gt: BigInt
+  collateral_lt: BigInt
+  collateral_gte: BigInt
+  collateral_lte: BigInt
+  collateral_in: [BigInt!]
+  collateral_not_in: [BigInt!]
+  debt: BigInt
+  debt_not: BigInt
+  debt_gt: BigInt
+  debt_lt: BigInt
+  debt_gte: BigInt
+  debt_lte: BigInt
+  debt_in: [BigInt!]
+  debt_not_in: [BigInt!]
+  collateralSurplus: BigInt
+  collateralSurplus_not: BigInt
+  collateralSurplus_gt: BigInt
+  collateralSurplus_lt: BigInt
+  collateralSurplus_gte: BigInt
+  collateralSurplus_lte: BigInt
+  collateralSurplus_in: [BigInt!]
+  collateralSurplus_not_in: [BigInt!]
+  collateralSurplusChange: BigInt
+  collateralSurplusChange_not: BigInt
+  collateralSurplusChange_gt: BigInt
+  collateralSurplusChange_lt: BigInt
+  collateralSurplusChange_gte: BigInt
+  collateralSurplusChange_lte: BigInt
+  collateralSurplusChange_in: [BigInt!]
+  collateralSurplusChange_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+}
+
+enum _Trove_orderBy {
+  id
+  collateral
+  debt
+  collateralSurplus
+  collateralSurplusChange
+}
+
 type _CircularBuffer {
   """ 'CIRCULAR_BUFFER' """
   id: ID!
@@ -6223,102 +6336,4 @@ input _Proxy_filter {
 enum _Proxy_orderBy {
   id
   owner
-}
-
-type LiquidateProxy {
-  """ { Transaction hash }-{ Log index } """
-  id: ID!
-  amount: BigInt!
-}
-
-input LiquidateProxy_filter {
-  id: ID
-  id_not: ID
-  id_gt: ID
-  id_lt: ID
-  id_gte: ID
-  id_lte: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  amount: BigInt
-  amount_not: BigInt
-  amount_gt: BigInt
-  amount_lt: BigInt
-  amount_gte: BigInt
-  amount_lte: BigInt
-  amount_in: [BigInt!]
-  amount_not_in: [BigInt!]
-  """Filter for the block changed event."""
-  _change_block: BlockChangedFilter
-}
-
-enum LiquidateProxy_orderBy {
-  id
-  amount
-}
-
-type _Trove {
-  """ Trove owner's address """
-  id: ID!
-  """ Amount of ETH owner has deposited """
-  collateral: BigInt!
-  """ Amount of LUSD owner has withdrawn """
-  debt: BigInt!
-  """ Total amount of ETH surplus owner can claim """
-  collateralSurplus: BigInt!
-  """ Last change to collateralSurplus """
-  collateralSurplusChange: BigInt!
-}
-
-input _Trove_filter {
-  id: ID
-  id_not: ID
-  id_gt: ID
-  id_lt: ID
-  id_gte: ID
-  id_lte: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  collateral: BigInt
-  collateral_not: BigInt
-  collateral_gt: BigInt
-  collateral_lt: BigInt
-  collateral_gte: BigInt
-  collateral_lte: BigInt
-  collateral_in: [BigInt!]
-  collateral_not_in: [BigInt!]
-  debt: BigInt
-  debt_not: BigInt
-  debt_gt: BigInt
-  debt_lt: BigInt
-  debt_gte: BigInt
-  debt_lte: BigInt
-  debt_in: [BigInt!]
-  debt_not_in: [BigInt!]
-  collateralSurplus: BigInt
-  collateralSurplus_not: BigInt
-  collateralSurplus_gt: BigInt
-  collateralSurplus_lt: BigInt
-  collateralSurplus_gte: BigInt
-  collateralSurplus_lte: BigInt
-  collateralSurplus_in: [BigInt!]
-  collateralSurplus_not_in: [BigInt!]
-  collateralSurplusChange: BigInt
-  collateralSurplusChange_not: BigInt
-  collateralSurplusChange_gt: BigInt
-  collateralSurplusChange_lt: BigInt
-  collateralSurplusChange_gte: BigInt
-  collateralSurplusChange_lte: BigInt
-  collateralSurplusChange_in: [BigInt!]
-  collateralSurplusChange_not_in: [BigInt!]
-  """Filter for the block changed event."""
-  _change_block: BlockChangedFilter
-}
-
-enum _Trove_orderBy {
-  id
-  collateral
-  debt
-  collateralSurplus
-  collateralSurplusChange
 }

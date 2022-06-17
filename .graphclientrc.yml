@@ -29,6 +29,21 @@ sources:
               to:
                 type: Query
                 field: aavev2Liquidates
+  - name: ironbank
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/messari/iron-bank-ethereum
+    transforms:
+      - autoPagination:
+          validateSchema: true
+      - rename:
+          renames:
+            - from:
+                type: Query
+                field: liquidates
+              to:
+                type: Query
+                field: ironbankLiquidates
   - name: venus
     handler:
       graphql:

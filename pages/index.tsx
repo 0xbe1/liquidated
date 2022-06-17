@@ -180,18 +180,18 @@ function query(timestamp_gte: number) {
   return gql`
   fragment LiquidateFields on Liquidate {
     protocol {
-        name
-        network
-      }
-      hash
-      timestamp
-      from
-      to
-      asset {
-        symbol
-      }
-      amountUSD
-      profitUSD
+      name
+      network
+    }
+    hash
+    timestamp
+    from
+    to
+    asset {
+      symbol
+    }
+    amountUSD
+    profitUSD
   }
 
   {
@@ -204,6 +204,14 @@ function query(timestamp_gte: number) {
       ...LiquidateFields
     }
     aavev2Liquidates(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
+      first: 1000
+    ) {
+      ...LiquidateFields
+    }
+    ironbankLiquidates(
       orderBy: timestamp
       orderDirection: desc
       where: { amountUSD_gt: 0, timestamp_gte: ${timestamp_gte} }
@@ -260,6 +268,7 @@ export async function getStaticProps() {
         'compoundv2',
         'aavev2',
         'venus',
+        'ironbank',
         'makerdao',
         'liquity',
         'abracadabra',
