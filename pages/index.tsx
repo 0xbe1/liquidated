@@ -32,11 +32,11 @@ const Home: NextPage<{
   return (
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
-        <title>📺 liquidated live</title>
+        <title>📺 liquidated.live</title>
         <meta name="description" content="liquidations happening ..." />
         <meta property="og:url" content="https://liquidated.live/" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="📺 liquidated live" />
+        <meta property="og:title" content="📺 liquidated.live" />
         <meta property="og:description" content="liquidations happening ..." />
         <meta
           property="og:image"
@@ -45,7 +45,7 @@ const Home: NextPage<{
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="liquidated.live" />
         <meta property="twitter:url" content="https://liquidated.live/" />
-        <meta name="twitter:title" content="📺 liquidated live" />
+        <meta name="twitter:title" content="📺 liquidated.live" />
         <meta name="twitter:description" content="liquidations happening ..." />
         <meta
           name="twitter:image"
@@ -57,7 +57,7 @@ const Home: NextPage<{
       <main className="flex w-full flex-1 items-center sm:w-5/6 lg:w-4/5">
         <div className="w-full">
           <p className="my-5 text-3xl font-bold text-purple-600">
-            📺 liquidated live{' '}
+            📺 liquidated.live{' '}
             <span className="text-sm">
               powered by{' '}
               <a
