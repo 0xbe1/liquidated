@@ -29,6 +29,10 @@ const Home: NextPage<{
   const [amountThreshold, setAmountThreshold] = useState(2)
   const [num, setNum] = useState(LOAD_NUM)
 
+  const filteredLiquidates = liquidates.filter(
+    (l) => parseInt(l.amountUSD) >= Math.pow(10, amountThreshold)
+  )
+
   return (
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
@@ -89,15 +93,9 @@ const Home: NextPage<{
             <span>100k</span>
             <span>1m</span>
           </div>
-          <Liquidates
-            liquidates={liquidates
-              .filter(
-                (l) => parseInt(l.amountUSD) >= Math.pow(10, amountThreshold)
-              )
-              .slice(0, num)}
-          />
+          <Liquidates liquidates={filteredLiquidates.slice(0, num)} />
           <div className="flex justify-center pb-4">
-            {num < liquidates.length ? (
+            {num < filteredLiquidates.length ? (
               <button
                 className="hover:underline"
                 onClick={() => setNum((prevNum) => prevNum + LOAD_NUM)}
@@ -105,7 +103,7 @@ const Home: NextPage<{
                 👇 load more
               </button>
             ) : (
-              'The end!'
+              '🫡 no more'
             )}
           </div>
         </div>
