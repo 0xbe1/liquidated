@@ -16,10 +16,7 @@ interface Liquidate {
   }
   hash: string
   timestamp: string
-  asset?: {
-    symbol: string
-  }
-  market?: {
+  market: {
     inputToken: {
       symbol: string
     }
@@ -150,7 +147,7 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
               .map((s) => s[0].toUpperCase() + s.slice(1))
               .join(' ')}
           </div>
-          <div>{l.market ? l.market.inputToken.symbol : l.asset!.symbol}</div>
+          <div>{l.market.inputToken.symbol}</div>
           <div>
             {parseFloat(l.amountUSD).toLocaleString('en-US', {
               minimumFractionDigits: 2,
@@ -182,13 +179,16 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
 }
 
 function query(timestamp_gte: number) {
-  // TODO: remove asset from aavev2 and move market section to LiquidateFields
-  // when aavev2 subgraph upgrades to schema version 1.3.0
   return gql`
   fragment LiquidateFields on Liquidate {
     protocol {
       name
       network
+    }
+    market {
+      inputToken {
+        symbol
+      }
     }
     hash
     timestamp
@@ -204,11 +204,6 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
-      market {
-        inputToken {
-          symbol
-        }
-      }
     }
     aavev2Liquidates(
       orderBy: timestamp
@@ -217,9 +212,6 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
-      asset {
-        symbol
-      }
     }
     ironbankLiquidates(
       orderBy: timestamp
@@ -228,11 +220,6 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
-      market {
-        inputToken {
-          symbol
-        }
-      }
     }
     venusLiquidates(
       orderBy: timestamp
@@ -241,11 +228,6 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
-      market {
-        inputToken {
-          symbol
-        }
-      }
     }
     makerdaoLiquidates(
       orderBy: timestamp
@@ -254,11 +236,6 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
-      market {
-        inputToken {
-          symbol
-        }
-      }
     }
     liquityLiquidates(
       orderBy: timestamp
@@ -267,11 +244,6 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
-      market {
-        inputToken {
-          symbol
-        }
-      }
     }
     abracadabraLiquidates(
       orderBy: timestamp
@@ -280,11 +252,6 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
-      market {
-        inputToken {
-          symbol
-        }
-      }
     }
   }
 `
