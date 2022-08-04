@@ -3580,7 +3580,7 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): Protocol
-  protocols(
+  liquityProtocols(
     skip: Int = 0
     first: Int = 100
     orderBy: Protocol_orderBy

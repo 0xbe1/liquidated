@@ -14,6 +14,12 @@ sources:
               to:
                 type: Query
                 field: compoundv2Liquidates
+            - from:
+                type: Query
+                field: protocols
+              to:
+                type: Query
+                field: compoundv2Protocols
   - name: aavev2
     handler:
       graphql:
@@ -29,6 +35,12 @@ sources:
               to:
                 type: Query
                 field: aavev2Liquidates
+            - from:
+                type: Query
+                field: protocols
+              to:
+                type: Query
+                field: aavev2Protocols
   - name: ironbank
     handler:
       graphql:
@@ -44,6 +56,12 @@ sources:
               to:
                 type: Query
                 field: ironbankLiquidates
+            - from:
+                type: Query
+                field: protocols
+              to:
+                type: Query
+                field: ironbankProtocols
   - name: venus
     handler:
       graphql:
@@ -59,6 +77,12 @@ sources:
               to:
                 type: Query
                 field: venusLiquidates
+            - from:
+                type: Query
+                field: protocols
+              to:
+                type: Query
+                field: venusProtocols
   - name: makerdao
     handler:
       graphql:
@@ -74,6 +98,12 @@ sources:
               to:
                 type: Query
                 field: makerdaoLiquidates
+            - from:
+                type: Query
+                field: protocols
+              to:
+                type: Query
+                field: makerdaoProtocols
   - name: liquity
     handler:
       graphql:
@@ -89,6 +119,12 @@ sources:
               to:
                 type: Query
                 field: liquityLiquidates
+            - from:
+                type: Query
+                field: protocols
+              to:
+                type: Query
+                field: liquityProtocols
   - name: abracadabra
     handler:
       graphql:
@@ -104,3 +140,9 @@ sources:
               to:
                 type: Query
                 field: abracadabraLiquidates
+            - from:
+                type: Query
+                field: protocols
+              to:
+                type: Query
+                field: abracadabraProtocols

@@ -9,7 +9,34 @@ import Footer from '../components/footer'
 const PAST_N_DAYS = 3
 const LOAD_NUM = 100
 
+const SUPPORTED_PROTOCOLS = [
+  'compoundv2',
+  'aavev2',
+  'venus',
+  'ironbank',
+  'makerdao',
+  'liquity',
+  'abracadabra',
+]
+
+interface Protocol {
+  name: string
+  network: string
+}
+
 interface Liquidate {
+  hash: string
+  timestamp: string
+  market: {
+    inputToken: {
+      symbol: string
+    }
+  }
+  amountUSD: string
+  profitUSD: string
+}
+
+interface RichLiquidate {
   protocol: {
     name: string
     network: string
@@ -26,7 +53,7 @@ interface Liquidate {
 }
 
 const Home: NextPage<{
-  liquidates: Array<Liquidate>
+  liquidates: Array<RichLiquidate>
 }> = ({ liquidates }) => {
   const [amountThreshold, setAmountThreshold] = useState(2)
   const [num, setNum] = useState(LOAD_NUM)
@@ -115,7 +142,7 @@ const Home: NextPage<{
   )
 }
 
-function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
+function Liquidates({ liquidates }: { liquidates: Array<RichLiquidate> }) {
   return (
     <div className="my-4">
       <div className="grid grid-cols-6 text-purple-600">
@@ -180,11 +207,11 @@ function Liquidates({ liquidates }: { liquidates: Array<Liquidate> }) {
 
 function query(timestamp_gte: number) {
   return gql`
+  fragment ProtocolFields on Protocol {
+    name
+    network
+  }
   fragment LiquidateFields on Liquidate {
-    protocol {
-      name
-      network
-    }
     market {
       inputToken {
         symbol
@@ -197,6 +224,9 @@ function query(timestamp_gte: number) {
   }
 
   {
+    compoundv2Protocols {
+      ...ProtocolFields
+    }
     compoundv2Liquidates(
       orderBy: timestamp
       orderDirection: desc
@@ -204,6 +234,9 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
+    }
+    aavev2Protocols {
+      ...ProtocolFields
     }
     aavev2Liquidates(
       orderBy: timestamp
@@ -213,6 +246,9 @@ function query(timestamp_gte: number) {
     ) {
       ...LiquidateFields
     }
+    ironbankProtocols {
+      ...ProtocolFields
+    }
     ironbankLiquidates(
       orderBy: timestamp
       orderDirection: desc
@@ -220,6 +256,9 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
+    }
+    venusProtocols {
+      ...ProtocolFields
     }
     venusLiquidates(
       orderBy: timestamp
@@ -229,6 +268,9 @@ function query(timestamp_gte: number) {
     ) {
       ...LiquidateFields
     }
+    makerdaoProtocols {
+      ...ProtocolFields
+    }
     makerdaoLiquidates(
       orderBy: timestamp
       orderDirection: desc
@@ -237,6 +279,9 @@ function query(timestamp_gte: number) {
     ) {
       ...LiquidateFields
     }
+    liquityProtocols {
+      ...ProtocolFields
+    }
     liquityLiquidates(
       orderBy: timestamp
       orderDirection: desc
@@ -244,6 +289,9 @@ function query(timestamp_gte: number) {
       first: 1000
     ) {
       ...LiquidateFields
+    }
+    abracadabraProtocols {
+      ...ProtocolFields
     }
     abracadabraLiquidates(
       orderBy: timestamp
@@ -264,20 +312,19 @@ export async function getStaticProps() {
     query(currentEpochSeconds - PAST_N_DAYS * 24 * 60 * 60),
     {}
   )
+  const protocols = new Map<string, Protocol>(
+    SUPPORTED_PROTOCOLS.map((p) => [p, data[p + 'Protocols'][0]])
+  )
+  const liquidates = SUPPORTED_PROTOCOLS.flatMap((p) => {
+    let liquidates = data[p + 'Liquidates'] as Array<Liquidate>
+    let richLiquidates = liquidates.map((l) => {
+      return { ...l, protocol: protocols.get(p) }
+    }) as Array<RichLiquidate>
+    return richLiquidates
+  }).sort((a, b) => b.timestamp.localeCompare(a.timestamp))
   return {
     props: {
-      liquidates: [
-        'compoundv2',
-        'aavev2',
-        'venus',
-        'ironbank',
-        'makerdao',
-        'liquity',
-        'abracadabra',
-      ]
-        .map((p) => p + 'Liquidates')
-        .flatMap((q) => data[q] as Array<Liquidate>)
-        .sort((a, b) => b.timestamp.localeCompare(a.timestamp)),
+      liquidates,
     },
     revalidate: 60, // ISR (incremental static regeneration) per minute
   }
